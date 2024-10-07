@@ -1,0 +1,38 @@
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+
+/ {
+    behaviors {
+        hm1: homerow_mods {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping-term-ms = <150>;
+            quick-tap-ms = <0>;
+            flavor = "tap-preferred";
+            bindings = <&kp>, <&kp>;
+        };
+
+        hm2: homerow_mods {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <0>;
+            tapping-term-ms = <150>;
+            quick-tap-ms = <0>;
+            flavor = "tap-preferred";
+            bindings = <&kp Q>, <&kp U>;
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        default_layer { // Layer 0
+            bindings = <
+                  &kp A &kp B &kp C &kp D &hm1 V &hm2                         &kp T &kp S &bt BT_CLR &bt BT_NXT &bt BT_PRV
+                  &kp F &kp G &kp H &kp I &kp J                         &kp O &kp N &kp M &kp L &kp K 
+            &kp K &kp L &kp M &kp N &kp O &kp P                         &kp J &kp I &kp H &kp G &kp F &kp E 
+                  &kp Q &kp R &kp S &kp T                                     &kp D &kp C &kp B &kp A 
+                                    &kp U &kp V &kp W             &kp X &kp Y &kp Z 
+            >;
+        };
+    };
+ };
