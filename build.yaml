@@ -24,7 +24,3 @@ include:
     shield: turdus_right
   - board: nice_nano_v2
     shield: settings_reset
-  - board: nice_nano_v2
-    shield: turdus_right
-    cmake-args: -DCONFIG_ZMK_SPLIT=n
-    artifact-name: turdus_right_test
