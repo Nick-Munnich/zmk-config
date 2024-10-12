@@ -25,5 +25,23 @@
                                     &trans &trans &trans    &trans &trans &trans 
             >;
         };
+
+        extra_layer2 {status = "reserved";};
+
+        extra_layer3 {status = "reserved";};
+
+        extra_layer4 {status = "reserved";};
+
+        extra_layer5 {status = "reserved";};
+
+        extra_layer6 {status = "reserved";};
+
+        extra_layer7 {status = "reserved";};
+
+        extra_layer8 {status = "reserved";};
+
+        extra_layer9 {status = "reserved";};
+
+        extra_layer10 {status = "reserved";};
     };
  };
