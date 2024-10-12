@@ -26,6 +26,7 @@ include:
   - board: nice_nano_v2
     shield: turdus_left
     snippet: zmk-usb-logging
+    cmake-args: -CONFIG_ZMK_STUDIO=n
     artifact-name: turdus_left_with_logging
   - board: nice_nano_v2
     shield: turdus_right
