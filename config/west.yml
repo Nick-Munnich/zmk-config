@@ -8,8 +8,8 @@ manifest:
     # See https://docs.zephyrproject.org/3.2.0/develop/west/manifest.html#projects
   projects:
     - name: zmk
-      remote: zmkfirmware
-      revision: main
+      remote: me
+      revision: 80e6ff2c67fe36b1dd0c319ec79ba1c393aadecf
       import: app/west.yml
     - name: turdus
       remote: me
