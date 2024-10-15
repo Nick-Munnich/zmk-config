@@ -95,7 +95,7 @@
             >;
         };
 
-        wasd_gaming2 {
+        test {
             display-name = "Test";
             bindings = <
                   &trans &trans &trans &trans &trans            &trans &trans &trans &trans &trans
@@ -106,7 +106,7 @@
             >;
         };
         
-        wasd_gaming2 {
+        test2 {
             display-name = "Test 2";
             bindings = <
                   &trans &trans &trans &trans &trans            &trans &trans &trans &trans &trans
