@@ -9,7 +9,7 @@ manifest:
   projects:
     - name: zmk
       remote: me
-      revision: 80e6ff2c67fe36b1dd0c319ec79ba1c393aadecf
+      revision: ee4df9bdb106a5d72b28b63928009b677fc22cf6
       import: app/west.yml
     - name: turdus
       remote: me
