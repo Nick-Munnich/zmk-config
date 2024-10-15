@@ -77,7 +77,7 @@
             display-name = "WASD Gaming";
             bindings = <
                   &kp N1 &kp N2 &kp N3 &kp N4 &kp N5                     &trans &trans &trans &trans &trans 
-                  &kp ESC &kp Q &ht W W &kp E &kp R           &trans &trans &trans &trans &trans 
+                  &kp ESC &kp Q &kp W &kp E &kp R           &trans &trans &trans &trans &trans 
             &kp TAB &kp LSHFT &kp A &kp S &kp D &kp F       &trans &trans &trans &trans &trans &trans 
                 &kp LCTRL &kp Z &kp X &kp C                             &trans &trans &trans &trans 
                                     &trans &kp SPACE &trans    &trans &trans &trans 
