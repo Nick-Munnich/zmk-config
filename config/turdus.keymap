@@ -213,7 +213,7 @@ ZMK_UNICODE_PAIR(de_eszett,     N0, N0,  D,  F,    N1, E,   N9, E) // ß/ẞ
             bindings = <
             &bt_ht0 0 0 &bt_ht1 0 0 &bt_ht2 0 0 &trans &trans               &kp C_VOL_UP &kp C_VOL_DN &kp C_MUTE &kp C_BRI_UP &kp C_BRI_DN
                   &trans &kp PG_UP &kp UP &kp PG_DN &kp HOME           &kp QUESTION  &kp BSLH &kp LBRC &kp RBRC  &kp PLUS 
-            &td_rst &trans &kp LEFT &kp DOWN &kp RIGHT &kp END       &kp UNDER &kp SLASH  &kp LBKT &kp RBKT   &kp EQUALS &td_rst
+            &td_rst &trans &kp LEFT &kp DOWN &kp RIGHT &kp END       &kp A &kp SLASH  &kp LBKT &kp RBKT   &kp EQUAL &td_rst
                 &trans &trans &trans &trans                             &kp PIPE  &kp LPAR &kp RPAR &kp MINUS  
                                     &trans &trans &trans    &trans &trans &trans 
             >;
