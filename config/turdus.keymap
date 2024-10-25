@@ -1,134 +1,234 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
+#include "alphas/gallium.h"
 
-/* 
-&kp {
-    invert-if-active;
-};
-*/
+#define KEYS_L 0 1 2 3 4 10 11 12 13 14 20 21 22 23 24 25 32 33 34 35 
+#define KEYS_R 5 6 7 8 9 15 16 17 18 19 26 27 28 29 30 31 36 37 38 39
+#define THUMBS 40 41 42 43 44 45                                    // thumb keys
+
+#define OS_UNICODE_LEAD &macro_tap &kp LS(LC(U))   // Linux
+#define OS_UNICODE_TRAIL &macro_tap &kp SPACE     // Linux
+
+#define UC_MACRO(name, unicode_bindings) \
+    / { \
+        macros { \
+            name: name { \
+                compatible = "zmk,behavior-macro"; \
+                wait-ms = <0>; \
+                tap-ms = <0>; \
+                #binding-cells = <0>; \
+                bindings = <OS_UNICODE_LEAD>, <&macro_tap unicode_bindings>, <OS_UNICODE_TRAIL>; \
+            }; \
+        }; \
+    };
+
+#define UC_MODMORPH(name, uc_binding, shifted_uc_binding) \
+    / { \
+        behaviors { \
+            name: name { \
+                compatible = "zmk,behavior-mod-morph"; \
+                #binding-cells = <0>; \
+                bindings = <uc_binding>, <shifted_uc_binding>; \
+                mods = <(MOD_LSFT|MOD_RSFT)>; \
+            }; \
+        }; \
+    };
+
+#define ZMK_UNICODE_PAIR(name, L0, L1, L2, L3, U0, U1, U2, U3) \
+    UC_MACRO(name ## _l, &kp L0 &kp L1 &kp L2 &kp L3) \
+    UC_MACRO(name ## _u, &kp U0 &kp U1 &kp U2 &kp U3) \
+    UC_MODMORPH(name, &name ## _l, &name ## _u)
+
+
+ZMK_UNICODE_PAIR(   de_ae,      N0, N0,  E, N4,    N0, N0,  C, N4) // ä/Ä
+ZMK_UNICODE_PAIR(   de_oe,      N0, N0,  F, N6,    N0, N0,  D, N6) // ö/Ö
+ZMK_UNICODE_PAIR(   de_ue,      N0, N0,  F,  C,    N0, N0,  D,  C) // ü/Ü
+ZMK_UNICODE_PAIR(de_eszett,     N0, N0,  D,  F,    N1, E,   N9, E) // ß/ẞ
+
+#define R_RING_U U
+#define R_RING_H E
+
+#define R_MID_U O
+#define R_MID_H A
+
+#define L_INDEX_H S
+#define R_PINKY_U Z
+
 
 / {
     behaviors {
-        /*
-        ht: hold_tap {
+
+        td_rst: reset_tap_dance {
+            compatible = "zmk,behavior-tap-dance";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&studio_unlock>, <&reset>, <&bootloader>;
+        };
+
+        hml: hold_tap_left {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <175>;                // repeat on tap-into-hold
+            require-prior-idle-ms = <150>;
+            bindings = <&kp>, <&kp>;
+            hold-trigger-key-positions = <KEYS_R THUMBS>;
+            hold-trigger-on-release;             // delay positional check until key-release
+        };
+
+        hmr: hold_tap_right {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <175>;                // repeat on tap-into-hold
+            require-prior-idle-ms = <150>;
+            bindings = <&kp>, <&kp>;
+            hold-trigger-key-positions = <KEYS_L THUMBS>;
+            hold-trigger-on-release;             // delay positional check until key-release
+        };
+
+        bt_ht0: bluetooth_hold_tap0 {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "tap-preferred";
-            tapping-term-ms = <400>;
-            hold-while-undecided;
-            bindings = <&kp>, <&kt>;
+            tapping-term-ms = <1000>;
+            bindings = <&bt_sel0>, <&bt_clr>;
         };
-        */
-
-        kton: key_toggle_on {
-            compatible = "zmk,behavior-key-toggle";
-            #binding-cells = <1>;
-            display-name = "Key Toggle";
-            toggle-mode = "on";
+        bt_ht1: bluetooth_hold_tap1 {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <1000>;
+            bindings = <&bt_sel1>, <&bt_clr>;
         };
-
-        ktoff: key_toggle_off {
-            compatible = "zmk,behavior-key-toggle";
-            #binding-cells = <1>;
-            display-name = "Key Toggle";
-            toggle-mode = "off";
-        };
-
-        tog_off: toggle_layer_off_only {
-            compatible = "zmk,behavior-toggle-layer";
-            #binding-cells = <1>;
-            display-name = "Toggle Layer";
-            toggle-mode = "off";
-        };
-
-        tog_on: toggle_layer_on_only {
-            compatible = "zmk,behavior-toggle-layer";
-            #binding-cells = <1>;
-            display-name = "Toggle Layer";
-            toggle-mode = "on";
+        bt_ht2: bluetooth_hold_tap2 {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <1000>;
+            bindings = <&bt_sel2>, <&bt_clr>;
         };
     };
+
+    macros {
+        bt_clr: bluetooth_clear {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings=<&macro_tap &bt BT_CLR>;
+        };
+        bt_sel0: bluetooth_select0 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings=<&macro_tap &bt BT_SEL 0>;
+        };
+        bt_sel1: bluetooth_select1 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings=<&macro_tap &bt BT_SEL 1>;
+        };
+        bt_sel2: bluetooth_select2 {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings=<&macro_tap &bt BT_SEL 2>;
+        };
+    };
+
+    combos {
+        compatible = "zmk,combos";
+        combo_soft_off {
+            timeout-ms = <50>;
+            key-positions = <4 5>;
+            bindings = <&soft_off>;
+        };
+        combo_sleep {
+            timeout-ms = <50>;
+            key-positions = <8 9>;
+            bindings = <&kp C_SLEEP>;
+        };
+        combo_oe {
+            timeout-ms = <50>;
+            key-positions = <17 29>;
+            bindings = <&de_oe>;
+            layers = <0>;
+        };
+        combo_ae {
+            timeout-ms = <50>;
+            key-positions = <28 29>;
+            bindings = <&de_ae>;
+            layers = <0>;
+        };
+        combo_ue {
+            timeout-ms = <50>;
+            key-positions = <18 29>;
+            bindings = <&de_ue>;
+            layers = <0>;
+        };
+        combo_sz {
+            timeout-ms = <50>;
+            key-positions = <10 24>;
+            bindings = <&de_eszett>;
+            layers = <0>;
+        };
+    };
+
+    /*
+    Stuff:
+    Gaming layers
+    */
     
     keymap {
         compatible = "zmk,keymap";
 
         default_layer { // Layer 0
+            display-name = "Alphas";
             bindings = <
-                  &kp N1 &kp N2 &kp N3 &kp N4 &kp N5                    &kp N6 &kp N7 &kp N8 &kp N9 &kp N0
-                  &kp Q &kp W &kp E &kp R &kp T                         &kp Y &kp U &kp I &kp O &kp P 
-            &kp TAB &kp A &kp S &kp D &kp F &kp G                         &kp H &kp J &kp K &kp L &kp B &kp BSPC 
-                  &kp Z &kp X &kp C &kp V                                     &kp N &kp M &kp COMMA &kp DOT 
-                                    &kp LSHFT &kp SPACE &kp LCTRL             &mo 1 &kp ENTER &kp DEL 
+                // Left num row
+                &kp N1 &kp N2 &kp N3 &kp N4 &kp N5 
+                // Right num row
+                &kp N6 &kp N7 &kp N8 &kp N9 &kp N0
+                // Left upper row
+                &kp L_PINKY_U &kp L_RING_U &kp L_MID_U &kp L_INDEX_U &kp L_INDEX_R  
+                // Right upper row
+                &kp R_INDEX_R &kp R_INDEX_U &kp R_MID_U &kp R_RING_U &kp R_PINKY_U 
+                // Left home row
+                &kp L_PINKY_O &hml LALT L_PINKY_H   &hml LGUI L_RING_H   &hml LSHFT L_MID_H  &hml LCTRL L_INDEX_H  &kp L_INDEX_T 
+                // Right home row
+                &kp R_INDEX_T  &hmr LCTRL R_INDEX_H  &hmr RSHFT R_MID_H  &hmr LGUI R_RING_H   &hmr LALT R_PINKY_H &kp R_PINKY_O 
+                // Left lower row
+                &kp L_PINKY_B &kp L_RING_B &kp L_MID_B &kp L_INDEX_B
+                // Right lower row
+                &kp R_INDEX_B &kp R_MID_B &kp R_RING_B &kp R_PINKY_B 
+                // Left thumbs
+                &gresc &kp SPACE &lt 1 TAB
+                // Right thumbs
+                &lt 2 ENTER &kp BSPC &kp DEL
             >;
         };
 
-        layer_one {
+        nav_sym {
+            display-name = "Nav + Control";
             bindings = <
-                  &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4     &bt BT_PRV &bt BT_NXT &trans &trans &bt BT_CLR 
-                  &trans &trans &trans &trans &studio_unlock            &studio_unlock &trans &trans &trans &trans 
-            &bootloader &trans &trans &trans &trans &trans       &trans &to 2 &trans &trans &trans &bootloader 
-                &trans &trans &trans &trans                             &trans &trans &trans &to 4 
+            &bt_ht0 0 0 &bt_ht1 0 0 &bt_ht2 0 0 &trans &trans               &kp C_VOL_UP &kp C_VOL_DN &kp C_MUTE &kp C_BRI_UP &kp C_BRI_DN
+                  &trans &kp PG_UP &kp UP &kp PG_DN &kp HOME           &kp QUESTION  &kp BSLH &kp LBRC &kp RBRC  &kp PLUS 
+            &td_rst &trans &kp LEFT &kp DOWN &kp RIGHT &kp END       &kp UNDERSCORE &kp SLASH  &kp LBKT &kp RBKT   &kp EQUALS &td_rst
+                &trans &trans &trans &trans                             &kp PIPE  &kp LPAR &kp RPAR &kp MINUS  
                                     &trans &trans &trans    &trans &trans &trans 
             >;
         };
 
-        wasd_gaming {
-            display-name = "WASD Gaming";
+        //on-off
+        numpad {
+            display-name = "Number Pad";
             bindings = <
-                  &kp N1 &kp N2 &kp N3 &kp N4 &kp N5                     &trans &trans &trans &trans &trans 
-                  &kp ESC &kp Q &kp W &kp E &kp R           &trans &trans &trans &trans &trans 
-            &kp TAB &kp LSHFT &kp A &kp S &kp D &kp F       &trans &trans &trans &trans &trans &trans 
-                &kp LCTRL &kp Z &kp X &kp C                             &trans &trans &trans &trans 
-                                    &trans &kp SPACE &trans    &trans &trans &trans 
-            >;
-        };
-
-        wasd_gaming2 {
-            display-name = "WASD Gaming 2";
-            bindings = <
-                  &trans &trans &trans &trans &trans            &trans &trans &trans &trans &trans
-                  &trans &trans &trans &trans &trans            &trans &trans &trans &trans &trans 
-            &trans &trans &trans &trans &trans &trans       &trans &trans &trans &trans &trans &trans 
-                &trans &trans &trans &trans                             &trans &trans &trans &trans 
+                    &kp F1 &kp F2 &kp F3 &kp F4 &kp F5                      &kp F8 &kp F9 &kp F10 &kp F11 &kp F12
+                    &trans &kp KP_N7 &kp KP_N8 &kp KP_N9 &kp F6            &kp F7 &kp K_CUT &kp K_COPY &kp K_PASTE &trans 
+           &trans &kp KP_N0 &kp KP_N4 &kp KP_N5 &kp KP_N6 &trans           &trans  &hmr LCTRL R_INDEX_H  &hmr RSHFT R_MID_H  &hmr LGUI R_RING_H   &hmr LALT R_PINKY_H &trans
+                &trans &kp KP_N1 &kp KP_N2 &kp KP_N3                             &kp K_UNDO &kp K_REDO &kp PSCRN &trans 
                                     &trans &trans &trans    &trans &trans &trans 
             >;
         };
-
-        test {
-            display-name = "Test";
-            bindings = <
-                  &trans &trans &trans &trans &trans            &trans &trans &trans &trans &trans
-                  &trans &trans &trans &trans &trans            &kton W &ktoff W &tog_on 5 &trans &trans 
-            &trans &trans &trans &trans &trans &trans       &trans &trans &trans &trans &trans &trans 
-                &trans &trans &trans &trans                             &trans &trans &trans &trans 
-                                    &trans &trans &trans    &trans &trans &to 0 
-            >;
-        };
-        
-        test2 {
-            display-name = "Test 2";
-            bindings = <
-                  &trans &trans &trans &trans &trans            &trans &trans &trans &trans &trans
-                  &trans &trans &trans &trans &trans            &kp A &kp B &trans &tog_off 5 &trans 
-            &trans &trans &trans &trans &trans &trans       &trans &trans &trans &trans &trans &trans 
-                &trans &trans &trans &trans                             &trans &trans &trans &trans 
-                                    &trans &trans &trans    &trans &trans &trans 
-            >;
-        };
-
-        extra_layer4 {status = "reserved";};
-
-        extra_layer5 {status = "reserved";};
-
-        extra_layer6 {status = "reserved";};
-
-        extra_layer7 {status = "reserved";};
-
-        extra_layer8 {status = "reserved";};
-
-        extra_layer9 {status = "reserved";};
-
-        extra_layer10 {status = "reserved";};
     };
  };
