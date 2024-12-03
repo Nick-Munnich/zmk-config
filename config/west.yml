@@ -1,18 +1,22 @@
 manifest:
+  defaults:
+    revision: main
+  projects:
+    - name: zmk-module-collection
+      remote: me
+      path: collection
+      import:
+         file: west.yml
+         path-prefix: external-zmk-modules
+         name-allowlist: 
+             - zmk-keyboards-akohekohe  
+    - name: zmk
+      remote: zmkfirmware
+      import: app/west.yml
   remotes:
     - name: zmkfirmware
       url-base: https://github.com/zmkfirmware
     - name: me
       url-base: https://github.com/Nick-Munnich
-    # Additional modules containing boards/shields/custom code can be listed here as well
-    # See https://docs.zephyrproject.org/3.2.0/develop/west/manifest.html#projects
-  projects:
-    - name: zmk
-      remote: me
-      revision: ee4df9bdb106a5d72b28b63928009b677fc22cf6
-      import: app/west.yml
-    - name: turdus
-      remote: me
-      revision: main
   self:
     path: config
